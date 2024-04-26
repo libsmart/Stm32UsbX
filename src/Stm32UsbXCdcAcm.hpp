@@ -33,10 +33,10 @@ namespace Stm32UsbX {
 
 
         void loop() {
-            if(rxBuffer.getLength() > 0) {
-                Debugger_log(DBG, "received '%.*s'", rxBuffer.getLength(), rxBuffer.getReadPointer());
-                rxBuffer.clear();
-            }
+            // if(rxBuffer.getLength() > 0) {
+                // Debugger_log(DBG, "received '%.*s'", rxBuffer.getLength(), rxBuffer.getReadPointer());
+                // rxBuffer.clear();
+            // }
         }
 
 
@@ -92,7 +92,8 @@ namespace Stm32UsbX {
             TX_DATA_READY = 1,
             RX_DATA_READY = 2,
             READ_DONE = 4,
-            WRITE_DONE = 8
+            WRITE_DONE = 8,
+            WRITE_LOCK = 16
         };
 
 
@@ -104,7 +105,7 @@ namespace Stm32UsbX {
         static Stm32UsbXCdcAcm *self;
 
 
-        class txBufferClass: public Stm32Common::StringBuffer<512> {
+        class txBufferClass final: public Stm32Common::StringBuffer<256> {
         protected:
             void onEmpty() override {
                 tx_event_flags_set(&self->flags, ~static_cast<ULONG>(eventFlags::TX_DATA_READY), TX_AND);
@@ -115,7 +116,7 @@ namespace Stm32UsbX {
             }
         } txBuffer;
 
-        class rxBufferClass: public Stm32Common::StringBuffer<512> {
+        class rxBufferClass final: public Stm32Common::StringBuffer<256> {
         protected:
             void onEmpty() override {
                 tx_event_flags_set(&self->flags, ~static_cast<ULONG>(eventFlags::RX_DATA_READY), TX_AND);
