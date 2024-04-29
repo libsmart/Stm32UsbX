@@ -119,7 +119,7 @@ VOID Stm32UsbXCdcAcm::workerThread() {
                 if (eolPos > 0) {
                     Stm32GcodeRunner::AbstractCommand *cmd{};
                     const size_t cmdLen = std::min(posR < 0 ? SIZE_MAX : posR, posN < 0 ? SIZE_MAX : posN);
-                    auto parserRet = Stm32GcodeRunner::parser.parseString(
+                    auto parserRet = Stm32GcodeRunner::parser->parseString(
                         cmd, reinterpret_cast<const char *>(rxBuffer.getReadPointer()), cmdLen);
                     rxBuffer.remove(eolPos + 1);
 
