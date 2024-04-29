@@ -4,6 +4,8 @@
  */
 
 #include "Stm32UsbX.hpp"
+
+#include "Helper.hpp"
 #include "main.h"
 #include "RTE_Components.h"
 #include "ux_device_descriptors.h"
@@ -22,6 +24,7 @@ UINT Stm32UsbX::setupThread(TX_BYTE_POOL *byte_pool) {
 
     UINT ret = TX_SUCCESS;
     CHAR *pointer;
+    CHAR *pointer2;
     UCHAR *device_framework_high_speed;
     ULONG device_framework_hs_length;
     UCHAR *device_framework_full_speed;
@@ -77,12 +80,25 @@ UINT Stm32UsbX::setupThread(TX_BYTE_POOL *byte_pool) {
 
 
 #ifdef UX_DEVICE_CDC_ACM
-    // Allocate the stack for App_Usb_Main_Thread_Entry
-    ret = tx_byte_allocate(byte_pool, (VOID **) &pointer, USBX_CDC_ACM_THREAD_STACK_SIZE, TX_NO_WAIT);
-    if (ret != UX_SUCCESS) Error_Handler();
 
-    cdcAcmWorker = new Stm32UsbXCdcAcm(pointer, USBX_CDC_ACM_THREAD_STACK_SIZE, Stm32ThreadxThread::thread::priority(),
+    // Allocate memory for App_Usb_Main_Thread_Entry object
+    ret = tx_byte_allocate(byte_pool, reinterpret_cast<void **>(&pointer2), sizeof(Stm32UsbXCdcAcm), TX_NO_WAIT);
+    if (ret != TX_SUCCESS) {
+        Debugger_log(DBG, "%lu: tx_byte_allocate() = 0x%02x", millis(), ret);
+        assert_param(ret != TX_SUCCESS);
+    }
+
+    // Allocate the stack for App_Usb_Main_Thread_Entry
+    ret = tx_byte_allocate(byte_pool, reinterpret_cast<void **>(&pointer), USBX_CDC_ACM_THREAD_STACK_SIZE, TX_NO_WAIT);
+    if (ret != TX_SUCCESS) {
+        Debugger_log(DBG, "%lu: tx_byte_allocate() = 0x%02x", millis(), ret);
+        assert_param(ret != TX_SUCCESS);
+    }
+
+    cdcAcmWorker = new(pointer2) Stm32UsbXCdcAcm(pointer, USBX_CDC_ACM_THREAD_STACK_SIZE, Stm32ThreadxThread::thread::priority(),
                                        "USBX CDC ACM worker");
+
+    // Start thread
     cdcAcmWorker->createThread();
     cdcAcmWorker->resume();
 #endif

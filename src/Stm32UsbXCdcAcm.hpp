@@ -114,7 +114,7 @@ namespace Stm32UsbX {
             void onNonEmpty() override {
                 tx_event_flags_set(&self->flags, static_cast<ULONG>(eventFlags::TX_DATA_READY), TX_OR);
             }
-        } txBuffer;
+        } txBuffer = {};
 
         class rxBufferClass final: public Stm32Common::StringBuffer<256> {
         protected:
@@ -125,7 +125,7 @@ namespace Stm32UsbX {
             void onNonEmpty() override {
                 tx_event_flags_set(&self->flags, static_cast<ULONG>(eventFlags::RX_DATA_READY), TX_OR);
             }
-        } rxBuffer;
+        } rxBuffer = {};
 
         // Stm32Common::StringBuffer<256> rxBuffer;
         // Stm32Common::StringBuffer<256> txBuffer;
