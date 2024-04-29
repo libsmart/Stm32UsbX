@@ -133,7 +133,7 @@ VOID Stm32UsbXCdcAcm::workerThread() {
                         }
                         cmdCtx->setCommand(cmd);
 
-                        cmdCtx->registerOnWriteFunction([&]() {
+                        cmdCtx->registerOnWriteFunction([cmdCtx, this]() {
                             // Debugger_log(DBG, "onWriteFn()");
                             if (cmdCtx->outputLength() > 0) {
                                 const auto result = cmdCtx->outputRead(
@@ -143,7 +143,7 @@ VOID Stm32UsbXCdcAcm::workerThread() {
                             }
                         });
 
-                        cmdCtx->registerOnCmdEndFunction([&]() {
+                        cmdCtx->registerOnCmdEndFunction([cmdCtx]() {
                             Debugger_log(DBG, "onCmdEndFn()");
                             Stm32GcodeRunner::worker->deleteCommandContext(cmdCtx);
                         });
