@@ -49,7 +49,7 @@ else ()
     add_compile_options(-Og -g)
 endif ()
 
-include_directories(Core/Inc Drivers/STM32F4xx_HAL_Driver/Inc Drivers/STM32F4xx_HAL_Driver/Inc/Legacy Drivers/CMSIS/Device/ST/STM32F4xx/Include Drivers/CMSIS/Include AZURE_RTOS/App Middlewares/ST/threadx/common/inc/ Middlewares/ST/threadx/ports/cortex_m4/gnu/inc/
+include_directories(Core/Inc Drivers/STM32F4xx_HAL_Driver/Inc Drivers/STM32F4xx_HAL_Driver/Inc/Legacy Drivers/CMSIS/Device/ST/STM32F4xx/Include Drivers/CMSIS/Include AZURE_RTOS/App Middlewares/ST/threadx/common/inc/ Middlewares/ST/threadx/ports/cortex_m4/gnu/inc/ USBX/App USBX/Target Middlewares/ST/usbx/common/usbx_host_classes/inc/ Middlewares/ST/usbx/common/core/inc/ Middlewares/ST/usbx/ports/generic/inc/
     AppCore
     ../../src
     Lib/Stm32Common/src
@@ -58,9 +58,9 @@ include_directories(Core/Inc Drivers/STM32F4xx_HAL_Driver/Inc Drivers/STM32F4xx_
     Lib/Stm32Serial/src
 )
 
-add_definitions(-DDEBUG -DUSE_HAL_DRIVER -DSTM32F429xx -DTX_INCLUDE_USER_DEFINE_FILE)
+add_definitions(-DDEBUG -DUSE_HAL_DRIVER -DSTM32F429xx -DTX_INCLUDE_USER_DEFINE_FILE -DUX_INCLUDE_USER_DEFINE_FILE)
 
-file(GLOB_RECURSE SOURCES "AZURE_RTOS/*.*" "Core/*.*" "Middlewares/*.*" "Drivers/*.*"
+file(GLOB_RECURSE SOURCES "AZURE_RTOS/*.*" "USBX/*.*" "Core/*.*" "Middlewares/*.*" "Drivers/*.*"
     "AppCore/*.*"
 #    "../../src/*.*"
     "Lib/Stm32Common/src/*.*"
