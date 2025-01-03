@@ -48,11 +48,27 @@ else ()
     add_compile_options(-Og -g)
 endif ()
 
-include_directories(${includes})
+include_directories(${includes}
+    AppCore
+    ../../src
+    Lib/Stm32Common/src
+    Lib/Stm32ItmLogger/src
+    Lib/Stm32ThreadX/src
+    Lib/Stm32Serial/src
+)
 
 add_definitions(${defines})
 
-file(GLOB_RECURSE SOURCES ${sources})
+file(GLOB_RECURSE SOURCES ${sources}
+    "AppCore/*.*"
+#    "../../src/*.*"
+    "Lib/Stm32Common/src/*.*"
+    "Lib/Stm32ItmLogger/src/*.*"
+    "Lib/Stm32ThreadX/src/*.*"
+    "Lib/Stm32Serial/src/*.*"
+)
+
+add_compile_definitions(-DPRINTF_INCLUDE_CONFIG_H)
 
 set(LINKER_SCRIPT $${CMAKE_SOURCE_DIR}/${linkerScript})
 
@@ -72,3 +88,6 @@ add_custom_command(TARGET $${PROJECT_NAME}.elf POST_BUILD
 Building $${BIN_FILE}")
 
 include(git_rev_macro.cmake)
+
+add_subdirectory(Lib/Stm32Shell)
+target_link_libraries(${PROJECT_NAME}.elf Stm32Shell)
