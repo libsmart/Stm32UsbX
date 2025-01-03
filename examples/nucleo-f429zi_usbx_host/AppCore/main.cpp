@@ -11,9 +11,10 @@
 
 #include "main.hpp"
 #include "globals.hpp"
-#include "Helper.hpp"
 #include "RunEvery.hpp"
-#include "Stm32ItmLogger.hpp"
+#include "RunOnce.hpp"
+#include "RunThreadOnce.hpp"
+#include "Command/RegisterCommands.hpp"
 
 
 /**
@@ -28,10 +29,32 @@ void setup() {
     dummyCpp = 0;
     dummyCandCpp = 0;
 
+    ::AppCore::Command::RegisterCommands()();
+
     Serial3.begin();
+
+    // print welcome message
+    // Serial3.print(F("startup "));
+    // Serial3.print(FIRMWARE_NAME);
+    // Serial3.print(F(" v"));
+    // Serial3.print(FIRMWARE_VERSION);
+    // Serial3.print(F(" "));
+    // Serial3.println(FIRMWARE_COPY);
+    // Serial3.flush();
+    delay(500);
     Serial3.print('\0');
+    Serial3.flush();
 }
 
+
+void loopOnce() {
+    Stm32ItmLogger::logger.setSeverity(Stm32ItmLogger::LoggerInterface::Severity::INFORMATIONAL)
+            ->println("::loopOnce()");
+
+#ifdef TX_ENABLE_STACK_CHECKING
+    tx_thread_stack_error_notify(Stack_Error_Handler);
+#endif
+}
 
 /**
  * @brief This function is the main loop that executes continuously.
@@ -67,4 +90,15 @@ void errorHandler() {
         HAL_GPIO_TogglePin(LED2_BLU_GPIO_Port, LED2_BLU_Pin);
         HAL_GPIO_TogglePin(LED3_RED_GPIO_Port, LED3_RED_Pin);
     }
+}
+
+
+[[noreturn]] void Stack_Error_Handler(TX_THREAD *thread_ptr) {
+    Logger.print("==> Stack_Error_Handler() called in thread ");
+    Logger.println(thread_ptr->tx_thread_name);
+    Logger.print("    Stack size: ");
+    Logger.println(thread_ptr->tx_thread_stack_size);
+    Error_Handler();
+    __disable_irq();
+    for (;;) { ; }
 }

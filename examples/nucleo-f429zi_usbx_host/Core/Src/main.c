@@ -25,7 +25,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "defines.h"
+#include "globals.h"
+#include "main.hpp"
+#include "Stm32ItmLoggerCPPWrapper.hpp"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -92,6 +95,9 @@ int main(void)
   MX_USART3_UART_Init();
   MX_USB_OTG_FS_HCD_Init();
   /* USER CODE BEGIN 2 */
+
+  // Jump to our C++ setup function
+  setup();
 
   /* USER CODE END 2 */
 
@@ -189,6 +195,10 @@ void Error_Handler(void)
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
+
+  // Jump to our C++ setup function
+  errorHandler();
+
   while (1)
   {
   }
@@ -208,6 +218,8 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE BEGIN 6 */
   /* User can add his own implementation to report the file name and line number,
      ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+    Logger_printf("Wrong parameters value: file %s on line %d\r\n", file, line);
+    Error_Handler();
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */

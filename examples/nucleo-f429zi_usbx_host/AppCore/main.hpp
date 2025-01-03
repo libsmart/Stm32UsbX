@@ -11,15 +11,18 @@
 #ifndef APPCORE_MAIN_HPP
 #define APPCORE_MAIN_HPP
 
-#include <main.h>
+#include "main.h"
+#include "tx_api.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
     void setup();
-    void errorHandler();
+    void loopOnce();
     void loop();
+    _Noreturn void errorHandler();
+    _Noreturn void Stack_Error_Handler(TX_THREAD *thread_ptr);
 
 #ifdef __cplusplus
 }
