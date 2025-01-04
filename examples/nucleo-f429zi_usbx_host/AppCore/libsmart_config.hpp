@@ -14,6 +14,8 @@
 #include "../Lib/Stm32Serial/src/libsmart_config.dist.hpp"
 #include "../Lib/Stm32Shell/src/libsmart_config.dist.hpp"
 
+#define LIBSMART_USE_THREADX
+
 // #undef LIBSMART_ITM_LOGGER_OVER_UART
 // #define LIBSMART_ITM_LOGGER_OVER_UART huart1
 // #undef LIBSMART_ITM_LOGGER_OVER_ITM

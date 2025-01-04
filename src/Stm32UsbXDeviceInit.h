@@ -10,7 +10,6 @@
 extern "C" {
 #endif
 
-void USBX_APP_Device_Init();
 #ifdef __cplusplus
 }
 #endif

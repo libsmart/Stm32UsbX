@@ -13,10 +13,15 @@
 
 #include "globals.h"
 #include <cstdint>
+#include <Stm32UsbX.hpp>
+#include <Host/UsbHost.hpp>
+#include <System/UsbSystem.hpp>
+
 #include "Stm32ItmLogger.hpp"
 
 #include "usart.h"
 #include "Driver/Stm32HalUartItDriver.hpp"
+#include "EventFlags/EventFlags.hpp"
 #include "ezShell/Shell.hpp"
 
 
@@ -32,7 +37,9 @@ inline Stm32Common::StreamSession::Manager<Stm32Shell::ezShell::Shell, 1> micror
 inline Stm32Serial::Stm32HalUartItDriver uart3Driver(&huart3, "uart3Driver");
 inline Stm32Serial::Stm32Serial Serial3(&uart3Driver, &microrlStreamSessionManager);
 
-
+inline Stm32UsbX::UsbSystem usbSystem("USB", &Logger);
+inline Stm32UsbX::UsbHost usbHost("USB-Host", &Logger);
+inline Stm32ThreadX::EventFlags hcdFlags("hcdFlags");
 
 #ifdef __cplusplus
 }
