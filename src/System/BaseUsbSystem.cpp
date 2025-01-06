@@ -75,7 +75,7 @@ void BaseUsbSystem::error_callback_register(error_callback_cb error_callback) {
     ux_utility_error_callback_register(error_callback);
 }
 
-#if !defined(UX_HOST_SIDE_ONLY)
+#if !defined(UX_HOST_SIDE_ONLY) && false
 UINT BaseUsbSystem::tasks_run() {
     log(Stm32ItmLogger::LoggerInterface::Severity::DEBUGGING)
             ->printf("Stm32UsbX::BaseUsbSystem[%s]::tasks_run(%p, %d, %p, %d)\r\n", getName());

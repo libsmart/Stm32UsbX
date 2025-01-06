@@ -33,7 +33,7 @@ namespace Stm32UsbX {
 
         virtual UINT uninitialize();
 
-#if !defined(UX_HOST_SIDE_ONLY)
+#if !defined(UX_HOST_SIDE_ONLY) && false
         virtual UINT tasks_run();
 #endif
 
