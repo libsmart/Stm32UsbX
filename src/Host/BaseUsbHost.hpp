@@ -125,7 +125,7 @@ namespace Stm32UsbX {
          * @param hid_client_handler The callback function for handling events associated with the HID client.
          * @return Returns `UX_SUCCESS` if the registration is successful, or an error code otherwise.
          */
-        [[deprecated("This should actually reside in an own class")]]
+        // [[deprecated("This should actually reside in an own class")]]
         virtual UINT class_hid_client_register(UCHAR *hid_client_name, hid_client_handler_cb hid_client_handler);
 
         virtual bool isInitialized();
