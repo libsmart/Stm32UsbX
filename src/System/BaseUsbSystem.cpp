@@ -5,25 +5,6 @@
 
 #include "BaseUsbSystem.hpp"
 
-#if __EXCEPTIONS
-#include <stdexcept>
-#define LIBSMART_HANDLE_ERROR(fmt, ...)                                          \
-do {                                                                    \
-char buffer[snprintf(nullptr, 0, fmt, __VA_ARGS__) + 1]{};              \
-snprintf(buffer, sizeof(buffer), fmt, __VA_ARGS__);                     \
-log(Stm32ItmLogger::LoggerInterface::Severity::ERROR)->println(buffer); \
-throw std::runtime_error(buffer);                                       \
-} while (0);
-#else
-#define LIBSMART_HANDLE_ERROR(fmt, ...)                                          \
-do {                                                                    \
-char buffer[snprintf(nullptr, 0, fmt, __VA_ARGS__) + 1]{};              \
-snprintf(buffer, sizeof(buffer), fmt, __VA_ARGS__);                     \
-log(Stm32ItmLogger::LoggerInterface::Severity::ERROR)->println(buffer); \
-return ret;                                                             \
-} while (0);
-#endif
-
 using namespace Stm32UsbX;
 
 UINT BaseUsbSystem::initialize(void *regular_memory_pool_start, ULONG regular_memory_size,
